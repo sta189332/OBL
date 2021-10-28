@@ -1,0 +1,22 @@
+Package: OBL
+Type: Package
+Title: Obtain uptimum block length
+Version: 0.1.0
+Authors@R: c(
+  person("Ayinde", "Kayode", email = "kayinde@futa.edu.ng", role = c("cre","aut")),
+  person("Daniel", "James", email = "futathesis@gmail.com", role = "aut"))
+Maintainer: Daniel James <futathesis@gmail.com>
+Description: Obtain optimum block from Nonoverlaping Block Bootstrap method.
+Depends:
+  R (>= 4.1.0)
+Imports:
+  forecast,
+  foreach,
+  doParallel,
+  parallel,
+  future,
+  utils,
+  stats
+License: GPL (>= 2)
+Encoding: UTF-8
+RoxygenNote: 7.1.2
