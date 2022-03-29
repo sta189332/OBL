@@ -20,3 +20,4 @@ Imports:
 License: GPL (>= 2)
 Encoding: UTF-8
 RoxygenNote: 7.1.2
+LazyData: true
