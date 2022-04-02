@@ -22,6 +22,5 @@ Encoding: UTF-8
 RoxygenNote: 7.1.2
 LazyData: true
 Suggests: 
-    knitr,
-    rmarkdown
+    knitr, rmarkdown
 VignetteBuilder: knitr
