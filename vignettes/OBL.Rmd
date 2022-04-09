@@ -1,5 +1,5 @@
 ---
-title: "OBL"
+title: "OBL: Optimum Block Length for Bootstrap Methods"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{OBL}
@@ -17,3 +17,17 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(OBL)
 ```
+
+## Statement of the Research Problem
+
+### Introduction
+
+ARIMA method has limitations in the area of small sample sizes among others. although, analysis of small sample series are available in few cases, there is currently no widely applicable and easily accessible method that can be used to make small sample inference. Methods like Edgeworth expansions involve a lot of algebra (which might discourage its users) and are also applicable in very special cases. The regular bootstrap method that could be a potential alternative failed on the grand of conflicting assumption. The normal bootstrap method rely on assumption that observations are independent and identically distributed (i.i.d.), while a typical time series data are dependent in nature.
+
+### Block Bootstrap Methods
+
+To find a way to ovoid this assumption of i. i. d. on normal bootstrap method and still maintain the dependency structure of time series data, we can retain some of this time-dependence by slicing a time series data into a number of chunks each with a length l. Instead of sampling each observation randomly (with replacement) like the conventional bootstrap methods, we can resample these chunks at random. This way, within each block the time-dependence is preserved while the i. i. d is also maintained between blocks (as serial correlation is distorted among the blocks). This way, one is able to coerce the i. i. d. assumption of the regular bootstrap method and the autocorrelation property of a typical time series data in one method. The broad name given to method that achieves these two opposing objective is called Block Bootstrap Methods.
+
+### Problem of Block Bootstrap
+
+The problem with the block bootstrap methods is the high sensitivity to the choice of block-length, or the number of blocks to break the time series into. This is one problem define in two ways, I have chosen to approached this problem with **the choice of block lenght**. 
