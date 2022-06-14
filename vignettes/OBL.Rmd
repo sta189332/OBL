@@ -5,12 +5,19 @@ vignette: >
   %\VignetteIndexEntry{OBL}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: "economia.bib"
+logo: obl.PNG
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+
+```{r setup2, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      comment = "",
+                      collapse = TRUE,
+                      error = TRUE, # do not interrupt in case of errors
+                      message = FALSE,
+                      warning = FALSE,
+                      comma = function(x) format(x, digits = 2, big.mark = ",")
 )
 ```
 
@@ -18,16 +25,88 @@ knitr::opts_chunk$set(
 library(OBL)
 ```
 
+
 ## Statement of the Research Problem
 
 ### Introduction
 
-ARIMA method has limitations in the area of small sample sizes among others. although, analysis of small sample series are available in few cases, there is currently no widely applicable and easily accessible method that can be used to make small sample inference. Methods like Edgeworth expansions involve a lot of algebra (which might discourage its users) and are also applicable in very special cases. The regular bootstrap method that could be a potential alternative failed on the grand of conflicting assumption. The normal bootstrap method rely on assumption that observations are independent and identically distributed (i.i.d.), while a typical time series data are dependent in nature.
+ARIMA method has limitations in the area of small sample sizes among others. although, analysis of small sample series are available in few cases, there is currently no widely applicable and easily accessible method that can be used to make small sample inference. Methods like Edgeworth expansions involve a lot of algebra (which might discourage its users) and are also applicable in very special cases. The regular bootstrap method that could be a potential alternative failed on the grand of conflicting assumptions. The normal bootstrap method depends on assumption that observations are independent and identically distributed (i.i.d.), while a typical time series data are dependent in nature.
 
 ### Block Bootstrap Methods
 
-To find a way to ovoid this assumption of i. i. d. on normal bootstrap method and still maintain the dependency structure of time series data, we can retain some of this time-dependence by slicing a time series data into a number of chunks each with a length l. Instead of sampling each observation randomly (with replacement) like the conventional bootstrap methods, we can resample these chunks at random. This way, within each block the time-dependence is preserved while the i. i. d is also maintained between blocks (as serial correlation is distorted among the blocks). This way, one is able to coerce the i. i. d. assumption of the regular bootstrap method and the autocorrelation property of a typical time series data in one method. The broad name given to method that achieves these two opposing objective is called Block Bootstrap Methods.
+To find a way to ovoid this assumption of i.i.d. on normal bootstrap method in @Efron1979 and still maintain the dependence structure of time series data, one can hold reasonable amount of dependence structure within the series in a way by slicing a time series data into a number of chunks each with a length *l*. This way the dependence structure within each block is kept. Instead of sampling each unit randomly with replacement (as it would have been done for traditional bootstrap method), the chunks are rather sampled. This will distort certain amount of dependence structure of the series only among blocks are distorted (as serial correlation is distorted among the blocks), while the i.i.d. is invariably preserved. This way, one is able to coerce the i.i.d. assumption of the regular bootstrap method and the assuption of presence of serial correlation of a typical time series data in one method. The broad name given to method that achieves these two opposing objective is called Block Bootstrap Methods.
 
 ### Problem of Block Bootstrap
 
-The problem with the block bootstrap methods is the high sensitivity to the choice of block-length, or the number of blocks to break the time series into. This is one problem define in two ways, I have chosen to approached this problem with **the choice of block lenght**. 
+The main challenge with block bootstrap procedures is the responsiveness of Root Mean Squared Error (RMSE) to the preference of block length (l), or the number of blocks (*m*). This is one problem define in two ways, I have chosen to approached this problem with **the preference of block lenght**. 
+
+### About the Package
+
+The OBL package provides optimum block length to five(5) different block bootrap methods vized:
+
+1. The Nonoverlapping Block Bootstrap (NBB) uses a method described in @Carlstein1986 [The use of subseries values for estimating the variance of a general statistic from a stationary sequence](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://hrcak.srce.hr/file/197357) which splits original series into nonoverlapping blocks and thereafter resamples the blocks to form a new series.
+
+2. The Moving Block Bootstrap (MBB) otherwise called Overlaping Block Bootstrap uses a method described in @Kunsch1989 [The jackknife and the bootstrap for general stationary observations](https://www.jstor.org/stable/2241719) which splits original series into overlapping blocks and thereafter resamples the blocks to form a new series.
+
+3. The Circular Block Bootstrap (CBB) uses a method described in @Politis1992 is an improvement on MBB @Kunsch1989 [A Circular Block Resampling Procedure for Stationary Data](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.stat.purdue.edu/research/technical_reports/pdfs/1991/tr91-07.pdf) such that in which provisions are made for observations at the tail end of the original series that could have been cut off from resampling simply because the left over element(s) is not equal to predetermined block length. This happens when original series is not divisible by $n - l + 1$, where $n$ is the number of original series and $l$ is the predetermined block sizes $1 < l <n$. Such provision is made up by completing the so called left-over by adding the first element(s) of the original series to form a circle. Afterwards, the blocks are resampled to form a new series.
+
+4. The Tapered Moving Block Bootstrap (TMBB unpublished) is formed to reduce the less representative presence of extreme member of the series from $2l$ to just 2.. Reduction of less-represented elements of the series will help to increase the performance of model evaluation metrics (RMSE and MAE).
+
+5. The Tapered Circular Block Bootstrap (TCBB unpublished) is an extension from TMBB such that the last block contains the first element of the parent series as its last sub-series element. It is formed to reduce the less representative presence of extreme member of the series from $2l$ (in the case of MBB) and from 2 (in the case of TMBB) to just 1. Reduction of less-represented element of the series will help to increase the performance of model evaluation metrics (which leads to reduced RMSE).
+
+### Instalation
+
+You can install the development version from GitHub with:
+
+```{r instalation, include = TRUE, eval = FALSE}
+install.packages("devtools")
+devtools::install_github("sta189332/OBL")
+```
+
+### Description
+
+blockboot function produces a data frame with three (3) column (Method, lb \& RMSE).
+
+#### Usage
+
+The minimum arguments in the function `blockboot()` can be the `ts` which should be a univirate time series data and `R` which is the numbers of replicate of resapling.
+
+```{r usage, include = TRUE, eval = FALSE}
+blockboot(ts,
+          R,
+          methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb"))
+```
+
+#### Argument
+
+:::::::::::::: {.columns}
+::: {.column width="30%"}
+
+ts
+
+R
+
+Methods
+
+:::
+::: {.column width="60%"}
+
+univariate time series data
+
+Number of replication for resampling
+
+methods is optional, if specified, it must be any combination as follows: "optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb"
+
+:::
+::::::::::::::
+
+### Examples
+
+```{r simulate, include = TRUE, eval = FALSE}
+set.seed(289805)
+ts <- arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1) 
+```
+
+
+
+### Reference

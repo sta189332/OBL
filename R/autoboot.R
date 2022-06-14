@@ -26,6 +26,8 @@
 #'
 #' @importFrom stats embed
 #'
+#' @importFrom tibble rownames_to_column
+#'
 #' @example
 #' set.seed(289805)
 #' ts <- arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1)
@@ -52,20 +54,19 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
       res <- sample(blk, replace = TRUE, R)
       res.unlist <- unlist(res, use.names = FALSE)
 
-      train <- utils::head(res.unlist, round(length(res.unlist) * 0.20))
+      train <- utils::head(res.unlist, round(length(res.unlist) - 2))
 
       test <- utils::tail(res.unlist, length(res.unlist) - length(train))
 
-      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train), h = length(test))$mean)
+      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = FALSE, num.cores = NULL), h = length(test))$mean)
 
       accuracyy <- forecast::accuracy(nfuture, test)
     }
 
     row.names(accuracyyy) <- lb
     nbb_rmse <- data.frame(lb, accuracyyy[ ,2])
-    #return(nbb_rmse[[1]][which.min(nbb_rmse[[2]])])
     colnames(nbb_rmse) <- c("lb", "RMSE")
-    with(nbb_rmse, paste(round(min(nbb_rmse$RMSE), 2), nbb_rmse$lb[which.min(nbb_rmse$RMSE)], sep = ' | '))
+    nbb_rmse
   }
 
   # ---------------------------------------------------------------------------
@@ -83,20 +84,19 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
       res <- sample(blk, replace = T, R)        # resamples the blocks
       res.unlist <- unlist(res, use.names = FALSE)   # unlist the bootstrap series
 
-      train <- head(res.unlist, round(length(res.unlist) * 0.20))
+      train <- head(res.unlist, round(length(res.unlist) - 2))
 
       test <- tail(res.unlist, length(res.unlist) - length(train))
 
-      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = TRUE, num.cores = NULL), h = length(test))$mean)        # makes the `future` object a vector
+      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = FALSE, num.cores = NULL), h = length(test))$mean)        # makes the `future` object a vector
 
       accuracyy <- forecast::accuracy(nfuture, test)      # RETURN ACCURACY
     }
 
     row.names(accuracyyy) <- lb
     mbb_rmse <- data.frame(lb, accuracyyy[,2])
-    #return(mbb1_rmse[[1]][which.min(mbb1_rmse[[2]])])
     colnames(mbb_rmse) <- c("lb", "RMSE")
-    with(mbb_rmse, paste(round(min(mbb_rmse$RMSE), 2), mbb_rmse$lb[which.min(mbb_rmse$RMSE)], sep = ' | '))
+    mbb_rmse
   }
 
   # ---------------------------------------------------
@@ -115,11 +115,11 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
       res <- sample(blk, replace = T, R)        # resamples the blocks
       res.unlist <- unlist(res, use.names = FALSE)   # unlist the bootstrap series
 
-      train <- head(res.unlist, round(length(res.unlist) * 0.20))
+      train <- head(res.unlist, round(length(res.unlist) - 2))
 
       test <- tail(res.unlist, length(res.unlist) - length(train))
 
-      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = TRUE, num.cores = NULL), h = length(test))$mean)        # makes the `future` object a vector
+      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = FALSE, num.cores = NULL), h = length(test))$mean)        # makes the `future` object a vector
 
       ACCURACYY <- forecast::accuracy(nfuture, test)      # RETURN ACCURACY
 
@@ -128,9 +128,8 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
 
     row.names(accuracyyy) <- lb
     cbb_rmse <- data.frame(lb, accuracyyy[,2])
-    #return(cbb_rmse[[1]][min(cbb_rmse[[2]])])
     colnames(cbb_rmse) <- c("lb", "RMSE")
-    with(cbb_rmse, paste(round(min(cbb_rmse$RMSE), 2), cbb_rmse$lb[which.min(cbb_rmse$RMSE)], sep = ' | '))
+    cbb_rmse
   }
 
   # ---------------------------------------------------------------
@@ -141,14 +140,6 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
     z <- 1:length(lb)
     `%dopar%` <- foreach::`%dopar%`
     accuracyyy <- foreach::foreach(z = 1:length(lb), .combine  =  'rbind', .packages = c('foreach', 'forecast')) %dopar% {
-      #blocks <- function(l, ov, n) {
-      #starts <- unique(sort(c(seq(1, n, l), seq(l - ov + 1, n, l))))
-      #ends <- pmin(starts + l - 1, n)
-
-      ## truncate starts and ends to the first num elements
-      #num <- match(n, ends)
-      #head(data.frame(starts, ends), num)
-      #}
 
       blockss <- function(l, ov, n) {
         starts <- pmin(n - l + 1, unique(sort(c(seq(1, n, l), seq(l - ov + 1, n, l)))))
@@ -168,11 +159,11 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
       res <- sample(blk, replace = T, R)        # resamples the blocks
       res.unlist <- unlist(res, use.names = FALSE)   # unlist the bootstrap series
 
-      train <- head(res.unlist, round(length(res.unlist) * 0.20))
+      train <- head(res.unlist, round(length(res.unlist) - 2))
 
       test <- tail(res.unlist, length(res.unlist) - length(train))
 
-      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = TRUE, num.cores = NULL), h = length(test))$mean)        # makes the `future` object a vector
+      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = FALSE, num.cores = NULL), h = length(test))$mean)        # makes the `future` object a vector
 
       accuracyy <- forecast::accuracy(nfuture, test)      # RETURN ACCURACY
     }
@@ -181,7 +172,7 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
     tmbb_rmse <- data.frame(lb, accuracyyy[,2])
     #return(mbb2_rmse[[1]][which.min(mbb2_rmse[[2]])])
     colnames(tmbb_rmse) <- c("lb", "RMSE")
-    with(tmbb_rmse, paste(round(min(tmbb_rmse$RMSE), 2), tmbb_rmse$lb[which.min(tmbb_rmse$RMSE)], sep = ' | '))
+    tmbb_rmse
   }
 
   # -------------------------------------------------------------------------
@@ -192,15 +183,6 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
     z <- 1:length(lb)
     `%dopar%` <- foreach::`%dopar%`
     accuracyyy <- foreach::foreach(z  =  1:length(lb), .combine  =  'rbind', .packages = c('foreach', 'forecast')) %dopar% {
-      #blocks <- function(l, ov, n) {
-      #starts <- unique(sort(c(seq(1, n, l), seq(l - ov + 1, n, l))))
-      #ends <- pmin(starts + l - 1, n)
-
-      ## truncate starts and ends to the first num elements
-      #num <- match(n, ends)
-      #head(data.frame(starts, ends), num)
-      #}
-
       blockss <- function(l, ov, n) {
         starts <- pmin(n - l + 1, unique(sort(c(seq(1, n, l), seq(l - ov + 1, n, l)))))
         starts <- unique(sort(c(seq(1, n, l), seq(l - ov + 1, n, l))))
@@ -220,25 +202,21 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
       res <- sample(blk, replace = T, R)        # resamples the blocks
       res.unlist <- unlist(res, use.names = FALSE)   # unlist the bootstrap series
 
-      train <- head(res.unlist, round(length(res.unlist) * 0.20))
+      train <- head(res.unlist, round(length(res.unlist) - 2))
 
       test <- tail(res.unlist, length(res.unlist) - length(train))
 
-      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = TRUE, num.cores = NULL), h = length(test))$mean)        # makes the `future` object a vector
+      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = FALSE, num.cores = NULL), h = length(test))$mean)        # makes the `future` object a vector
 
       accuracyy <- forecast::accuracy(nfuture, test)      # RETURN ACCURACY
     }
-
     row.names(accuracyyy) <- lb
     tcbb_rmse <- data.frame(lb, accuracyyy[,2])
-    #return(mbb3_rmse[[1]][which.min(mbb3_rmse[[2]])])
     colnames(tcbb_rmse) <- c("lb", "RMSE")
-    with(tcbb_rmse, paste(round(min(tcbb_rmse$RMSE), 2), tcbb_rmse$lb[which.min(tcbb_rmse$RMSE)], sep = ' | '))
+    tcbb_rmse
   }
 
-
-
-  output <- c()
+  output <- list()
 
   if ("optnbb" %in% methods) {
     output <- c(output, nbb = nbb(ts, R))
@@ -260,6 +238,9 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
     output <- c(output, tcbb = tcbb(ts, R))
   }
 
-  return(output)
-  doParallel::stopImplicitCluster(cl)
+  df <- list(nbb = data.frame(output$nbb.lb, output$nbb.RMSE), mbb = data.frame(output$mbb.lb, output$mbb.RMSE), cbb = data.frame(output$cbb.lb, output$cbb.RMSE), tmbb = data.frame(output$tmbb.lb, output$tmbb.RMSE), tcbb = data.frame(output$tcbb.lb, output$tcbb.RMSE))
+  df1 <- do.call(rbind, lapply(df, function(x) data.frame(lb = x[which.min(x[,2]), 1], RMSE = min(x[, 2])))) |>
+    tibble::rownames_to_column("Methods")
+
+  df1
 }
