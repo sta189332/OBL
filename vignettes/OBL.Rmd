@@ -25,36 +25,36 @@ knitr::opts_chunk$set(echo = TRUE,
 library(OBL)
 ```
 
-
-## Statement of the Research Problem
-
-### Introduction
+## Introduction
 
 ARIMA method has limitations in the area of small sample sizes among others. although, analysis of small sample series are available in few cases, there is currently no widely applicable and easily accessible method that can be used to make small sample inference. Methods like Edgeworth expansions involve a lot of algebra (which might discourage its users) and are also applicable in very special cases. The regular bootstrap method that could be a potential alternative failed on the grand of conflicting assumptions. The normal bootstrap method depends on assumption that observations are independent and identically distributed (i.i.d.), while a typical time series data are dependent in nature.
 
-### Block Bootstrap Methods
+## The Need for Block Bootstrap Methods
 
 To find a way to ovoid this assumption of i.i.d. on normal bootstrap method in @Efron1979 and still maintain the dependence structure of time series data, one can hold reasonable amount of dependence structure within the series in a way by slicing a time series data into a number of chunks each with a length *l*. This way the dependence structure within each block is kept. Instead of sampling each unit randomly with replacement (as it would have been done for traditional bootstrap method), the chunks are rather sampled. This will distort certain amount of dependence structure of the series only among blocks are distorted (as serial correlation is distorted among the blocks), while the i.i.d. is invariably preserved. This way, one is able to coerce the i.i.d. assumption of the regular bootstrap method and the assuption of presence of serial correlation of a typical time series data in one method. The broad name given to method that achieves these two opposing objective is called Block Bootstrap Methods.
 
-### Problem of Block Bootstrap
 
-The main challenge with block bootstrap procedures is the responsiveness of Root Mean Squared Error (RMSE) to the preference of block length (l), or the number of blocks (*m*). This is one problem define in two ways, I have chosen to approached this problem with **the preference of block lenght**. 
+## Statement of Problem
 
-### About the Package
+The main challenge with block bootstrap procedures is the responsiveness of Root Mean Squared Error (RMSE) to the preference of block length (*l*), or the number of blocks (*m*). This is one problem define in two ways, `OBL: Optimum Block Lengt` package has chosen to approached this problem with **the preference of block length**. Diverse methods can be used (which are explained briefly below), each method has numerous block lengths which must be considered, it is this problem that the `OBL: Optimum Block Lengt` package is here to solve.
+
+## About the Package
 
 The OBL package provides optimum block length to five(5) different block bootrap methods vized:
 
-1. The Nonoverlapping Block Bootstrap (NBB) uses a method described in @Carlstein1986 [The use of subseries values for estimating the variance of a general statistic from a stationary sequence](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://hrcak.srce.hr/file/197357) which splits original series into nonoverlapping blocks and thereafter resamples the blocks to form a new series.
+1. The Nonoverlapping Block Bootstrap (NBB) uses a method described in @Carlstein1986 [The use of subseries values for estimating the variance of a general statistic from a stationary sequence](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://hrcak.srce.hr/file/197357) which splits original series into nonoverlapping blocks and thereafter resamples the blocks in multiple times(which is named *R*) to form a new series.
 
-2. The Moving Block Bootstrap (MBB) otherwise called Overlaping Block Bootstrap uses a method described in @Kunsch1989 [The jackknife and the bootstrap for general stationary observations](https://www.jstor.org/stable/2241719) which splits original series into overlapping blocks and thereafter resamples the blocks to form a new series.
+2. The Moving Block Bootstrap (MBB) otherwise called Overlaping Block Bootstrap uses a method described in @Kunsch1989 [The jackknife and the bootstrap for general stationary observations](https://www.jstor.org/stable/2241719) which splits original series into overlapping blocks and thereafter resamples the blocks in multiple times(which is named *R*) to form a new series.
 
-3. The Circular Block Bootstrap (CBB) uses a method described in @Politis1992 is an improvement on MBB @Kunsch1989 [A Circular Block Resampling Procedure for Stationary Data](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.stat.purdue.edu/research/technical_reports/pdfs/1991/tr91-07.pdf) such that in which provisions are made for observations at the tail end of the original series that could have been cut off from resampling simply because the left over element(s) is not equal to predetermined block length. This happens when original series is not divisible by $n - l + 1$, where $n$ is the number of original series and $l$ is the predetermined block sizes $1 < l <n$. Such provision is made up by completing the so called left-over by adding the first element(s) of the original series to form a circle. Afterwards, the blocks are resampled to form a new series.
+3. The Circular Block Bootstrap (CBB) uses a method described in @Politis1992 is an improvement on MBB @Kunsch1989 [A Circular Block Resampling Procedure for Stationary Data](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.stat.purdue.edu/research/technical_reports/pdfs/1991/tr91-07.pdf) such that in which provisions are made for observations at the tail end of the original series that could have been cut off from resampling simply because the left over element(s) is not equal to predetermined block length. This happens when original series is not divisible by $n - l + 1$, where $n$ is the number of original series and $l$ is the predetermined block sizes $1 < l < n$. Such provision is made up by completing the so called left-over by adding the first element(s) of the original series to form a circle. Afterwards, the blocks in multiple times(which is named *R*) are resampled to form a new series.
 
-4. The Tapered Moving Block Bootstrap (TMBB unpublished) is formed to reduce the less representative presence of extreme member of the series from $2l$ to just 2.. Reduction of less-represented elements of the series will help to increase the performance of model evaluation metrics (RMSE and MAE).
+4. The Tapered Moving Block Bootstrap (TMBB unpublished) is formed to reduce the less representative presence of extreme member of the series from $2l$ to just 2.. Reduction of less-represented elements of the series will help to increase the performance of model evaluation metrics (RMSE and MAE). Afterwards, the blocks in multiple times(which is named *R*) are resampled to form a new series.
 
-5. The Tapered Circular Block Bootstrap (TCBB unpublished) is an extension from TMBB such that the last block contains the first element of the parent series as its last sub-series element. It is formed to reduce the less representative presence of extreme member of the series from $2l$ (in the case of MBB) and from 2 (in the case of TMBB) to just 1. Reduction of less-represented element of the series will help to increase the performance of model evaluation metrics (which leads to reduced RMSE).
+5. The Tapered Circular Block Bootstrap (TCBB unpublished) is an extension from TMBB such that the last block contains the first element of the parent series as its last sub-series element. It is formed to reduce the less representative presence of extreme member of the series from $2l$ (in the case of MBB) and from 2 (in the case of TMBB) to just 1. Reduction of less-represented element of the series will help to increase the performance of model evaluation metrics (which leads to reduced RMSE). Afterwards, the blocks in multiple times(which is named *R*) are resampled to form a new series.
 
-### Instalation
+It also checks for every possible block length *l* (where $1 < l < n$ for $n$ is the length of the original time series data) in each method to know which one is optimal by calculating RMSE value for every possible block length of each method and sorting out which of them is minimum in value. The minimum RMSE values for every method is sorted out in a data frame(with three(3) columns namely: Methods, lb and RMSE) to let the `OBL: Optimum Block Lengt` package users choose the method and the block length with the minimal RMSE value from the output data frame
+
+## Instalation
 
 You can install the development version from GitHub with:
 
@@ -63,11 +63,12 @@ install.packages("devtools")
 devtools::install_github("sta189332/OBL")
 ```
 
-### Description
+## Description
 
+It is observed that the optimum block length of any time series data is contingent(dependent) on the uniqueness of every time series data. Block bootstrap users thus, need to be flexible in choosing the optimum block length by adopting to a concise but clear while such method must be easy to use as well. As a result of the such a need, `OBL: Optimum Block Lengt` package is created to solve such problem. `OBL: Optimum Block Length` package helps users to search for the best block length and the best method that has the minimum RMSE value. It can then be used 
 blockboot function produces a data frame with three (3) column (Method, lb \& RMSE).
 
-#### Usage
+## Usage
 
 The minimum arguments in the function `blockboot()` can be the `ts` which should be a univirate time series data and `R` which is the numbers of replicate of resapling.
 
@@ -77,10 +78,10 @@ blockboot(ts,
           methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb"))
 ```
 
-#### Argument
+### Argument
 
 :::::::::::::: {.columns}
-::: {.column width="30%"}
+::: {.column width="20%"}
 
 ts
 
@@ -89,7 +90,7 @@ R
 Methods
 
 :::
-::: {.column width="60%"}
+::: {.column width="70%"}
 
 univariate time series data
 
@@ -109,4 +110,4 @@ ts <- arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1)
 
 
 
-### Reference
+## Reference

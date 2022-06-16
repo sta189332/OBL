@@ -34,15 +34,15 @@
 #' blockboot(ts, 1000)
 #'
 #' @export
-blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb")){
+blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb")){
   #To ignore the warnings during usage use the first 2 lines
   options(warn = -1)
   options("getSymbols.warning4.0" = FALSE)
   future::plan(future::multisession)
-  n_cores <- parallel::detectCores()
+  n_cores <- n_cores#parallel::detectCores()
   cl <- parallel::makeCluster(n_cores)
   doParallel::registerDoParallel(cores = n_cores)
-  nbb <- function(ts, R){
+  nbb <- function(ts, R, seed, n_cores){
     n <- length(ts)
     lb <- seq(n - 2) + 1
     z <- 1:length(lb)
@@ -50,7 +50,7 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
     accuracyyy <- foreach::foreach(z = 1:length(lb), .combine = 'rbind', .packages = c('foreach', 'forecast')) %dopar% {
       l <- lb[z]
       blk <- split(ts, ceiling(seq_along(ts) / l)); blk[lengths(blk) == l]
-      set.seed(6)
+      set.seed(seed)
       res <- sample(blk, replace = TRUE, R)
       res.unlist <- unlist(res, use.names = FALSE)
 
@@ -70,7 +70,7 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
   }
 
   # ---------------------------------------------------------------------------
-  mbb <- function(ts, R){
+  mbb <- function(ts, R, seed, n_cores){
     n <- length(ts)
     lb <- seq(n - 2) + 1
     z <- 1:length(lb)
@@ -80,7 +80,7 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
       b <- n - l + 1
       blk <- split(t(stats::embed(ts, b))[b:1,], 1:b)  # divides the series into overlapping1 blocks
       ######################################################
-      set.seed(6)
+      set.seed(seed)
       res <- sample(blk, replace = T, R)        # resamples the blocks
       res.unlist <- unlist(res, use.names = FALSE)   # unlist the bootstrap series
 
@@ -100,7 +100,7 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
   }
 
   # ---------------------------------------------------
-  cbb <- function(ts, R){
+  cbb <- function(ts, R, seed, n_cores){
     n <- length(ts)
     lb <- seq(n - 2) + 1
     z <- 1:length(lb)
@@ -111,7 +111,7 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
       m <- length(newts) - l + 1
       blk <- split(t(stats::embed(newts, m))[m:1,], 1:m)
       ######################################################
-      set.seed(6)
+      set.seed(seed)
       res <- sample(blk, replace = T, R)        # resamples the blocks
       res.unlist <- unlist(res, use.names = FALSE)   # unlist the bootstrap series
 
@@ -134,7 +134,7 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
 
   # ---------------------------------------------------------------
 
-  tmbb <- function(ts, R){
+  tmbb <- function(ts, R, seed, n_cores){
     n <- length(ts)
     lb <- seq(n - 2) + 1
     z <- 1:length(lb)
@@ -155,7 +155,7 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
       d <- blockss(l, ov, n)
       blk <- with(d, Map(function(i, j) ts[i:j], starts, ends))  # divides the series into overlapping1 blocks
       ######################################################
-      set.seed(6)
+      set.seed(seed)
       res <- sample(blk, replace = T, R)        # resamples the blocks
       res.unlist <- unlist(res, use.names = FALSE)   # unlist the bootstrap series
 
@@ -177,7 +177,7 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
 
   # -------------------------------------------------------------------------
 
-  tcbb <- function(ts, R){
+  tcbb <- function(ts, R, seed, n_cores){
     n <- length(ts)
     lb <- seq(n - 2) + 1
     z <- 1:length(lb)
@@ -198,7 +198,7 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
       #m <- ceiling(n / l)
       blk <- Map(function(i) {x <- seq(i, i + l - 1) %% max(ts + 1); x + cumsum(x == 0)}, d$starts) # or
       ######################################################
-      set.seed(6)
+      set.seed(seed)
       res <- sample(blk, replace = T, R)        # resamples the blocks
       res.unlist <- unlist(res, use.names = FALSE)   # unlist the bootstrap series
 
@@ -219,23 +219,23 @@ blockboot <- function(ts, R, methods = c("optnbb", "optmbb", "optcbb", "opttmbb"
   output <- list()
 
   if ("optnbb" %in% methods) {
-    output <- c(output, nbb = nbb(ts, R))
+    output <- c(output, nbb = nbb(ts, R, seed, n_cores))
   }
 
   if ("optmbb" %in% methods) {
-    output <- c(output, mbb = mbb(ts, R))
+    output <- c(output, mbb = mbb(ts, R, seed, n_cores))
   }
 
   if ("optcbb" %in% methods) {
-    output <- c(output, cbb = cbb(ts, R))
+    output <- c(output, cbb = cbb(ts, R, seed, n_cores))
   }
 
   if ("opttmbb" %in% methods) {
-    output <- c(output, tmbb = tmbb(ts, R))
+    output <- c(output, tmbb = tmbb(ts, R, seed, n_cores))
   }
 
   if ("opttcbb" %in% methods) {
-    output <- c(output, tcbb = tcbb(ts, R))
+    output <- c(output, tcbb = tcbb(ts, R, seed, n_cores))
   }
 
   df <- list(nbb = data.frame(output$nbb.lb, output$nbb.RMSE), mbb = data.frame(output$mbb.lb, output$mbb.RMSE), cbb = data.frame(output$cbb.lb, output$cbb.RMSE), tmbb = data.frame(output$tmbb.lb, output$tmbb.RMSE), tcbb = data.frame(output$tcbb.lb, output$tcbb.RMSE))
