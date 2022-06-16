@@ -6,7 +6,7 @@ Authors@R: c(
   person("Daniel", "James", email = "futathesis@gmail.com", role = c("cre","aut")),
   person("Ayinde", "Kayode", email = "kayinde@futa.edu.ng", role = "aut"))
 Maintainer: Daniel James <futathesis@gmail.com>
-Description: Obtain optimum block from Nonoverlapping Block Bootstrap method.
+Description: Obtain optimum block from Non-overlapping Block Bootstrap method.
 Depends:
   R (>= 4.1.0)
 Imports:

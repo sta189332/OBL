@@ -42,7 +42,7 @@ The main challenge with block bootstrap procedures is the responsiveness of Root
 
 The OBL package provides optimum block length to five(5) different block bootrap methods vized:
 
-1. The Nonoverlapping Block Bootstrap (NBB) uses a method described in @Carlstein1986 [The use of subseries values for estimating the variance of a general statistic from a stationary sequence](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://hrcak.srce.hr/file/197357) which splits original series into nonoverlapping blocks and thereafter resamples the blocks in multiple times(which is named *R*) to form a new series.
+1. The Non-overlapping Block Bootstrap (NBB) uses a method described in @Carlstein1986 [The use of subseries values for estimating the variance of a general statistic from a stationary sequence](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://hrcak.srce.hr/file/197357) which splits original series into Non-overlapping blocks and thereafter resamples the blocks in multiple times(which is named *R*) to form a new series.
 
 2. The Moving Block Bootstrap (MBB) otherwise called Overlaping Block Bootstrap uses a method described in @Kunsch1989 [The jackknife and the bootstrap for general stationary observations](https://www.jstor.org/stable/2241719) which splits original series into overlapping blocks and thereafter resamples the blocks in multiple times(which is named *R*) to form a new series.
 
