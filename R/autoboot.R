@@ -1,6 +1,8 @@
-#' Compute Optimal Block Length for Non-overlapping, Overlapping, synthetic-overlapping, appended-overlapping and Circular Block Bootstrap
+#' @title OBL: Optimal Block Length
+
+#'  @description Compute Optimal Block Length for Non-overlapping, Overlapping, Circular Block, tapered moving, and tapered circular Block Bootstrap method
 #'
-#' More detailed Description
+#' \code{blockboot} returns the a data frame with five(5) rows and three(3) columns.
 #'
 #' @describeIn This package helps to obtain the optimal block length of a time series data
 #'
@@ -9,6 +11,10 @@
 #' @param ts univariate time series
 #'
 #' @param R number of resample
+#'
+#' @param seed RNG seed
+#'
+#' @param n_cores number of core(s) to be used on your operaterating system
 #'
 #' @param methods   "optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb"
 #'
@@ -29,14 +35,18 @@
 #' @importFrom tibble rownames_to_column
 #'
 #' @example
-#' set.seed(289805)
-#' ts <- arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1)
-#' blockboot(ts, 1000)
+#'   # simulate univariate time series data
+#'   set.seed(289805)
+#'   ts <- arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1)
+#'   # get the optimal block length table
+#'   OBL::blockboot(ts = ts, R = 100, seed = 6, n_cores = 2, methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb"))
+#'
+#' @
 #'
 #' @export
 blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb")){
   #To ignore the warnings during usage use the first 2 lines
-  options(warn = -1)
+  suppressWarnings('non')#options(warn = -1)
   options("getSymbols.warning4.0" = FALSE)
   future::plan(future::multisession)
   n_cores <- n_cores#parallel::detectCores()

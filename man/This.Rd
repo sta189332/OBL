@@ -2,11 +2,16 @@
 % Please edit documentation in R/autoboot.R
 \name{blockboot}
 \alias{blockboot}
-\title{Compute Optimal Block Length for Non-overlapping, Overlapping, synthetic-overlapping, appended-overlapping and Circular Block Bootstrap}
+\title{OBL: Optimal Block Length
+ @description Compute Optimal Block Length for Non-overlapping, Overlapping, Circular Block, tapered moving, and tapered circular Block Bootstrap method
+
+\code{blockboot} returns the a data frame with five(5) rows and three(3) columns.}
 \usage{
 blockboot(
   ts,
   R,
+  seed,
+  n_cores,
   methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb")
 )
 }
@@ -15,10 +20,17 @@ blockboot(
 
 \item{R}{number of resample}
 
+\item{seed}{RNG seed}
+
+\item{n_cores}{number of core(s) to be used on your operaterating system}
+
 \item{methods}{"optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb"}
 }
 \description{
-More detailed Description
+OBL: Optimal Block Length
+ @description Compute Optimal Block Length for Non-overlapping, Overlapping, Circular Block, tapered moving, and tapered circular Block Bootstrap method
+
+\code{blockboot} returns the a data frame with five(5) rows and three(3) columns.
 }
 \section{Functions}{
 \itemize{

@@ -20,7 +20,14 @@ Simulated data generated with the following code:
 \usage{
 ts
 }
+\value{
+It returns a univairate time series data
+It could be a vector
+}
 \description{
+\code{arima.sim} returns the sum of all the values present in its arguments.
+}
+\details{
 A dataset containing simulated univariate time series of 10
 ts.
 }
