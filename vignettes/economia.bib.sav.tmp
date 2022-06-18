@@ -515,10 +515,10 @@ the bootstrap method are also studied.},
   publisher = {JSTOR},
 }
 
-@Article{Kunsch1989,
+@Article{kunsch1989,
   author    = {Kunsch, Hans R},
-  title     = {The jackknife and the bootstrap for general stationary observations},
   journal   = {The annals of Statistics},
+  title     = {The jackknife and the bootstrap for general stationary observations},
   year      = {1989},
   pages     = {1217--1241},
   publisher = {JSTOR},
@@ -564,7 +564,7 @@ the bootstrap method are also studied.},
   publisher = {JSTOR},
 }
 
-@Article{Efron1979,
+@Article{efron1979,
   author    = {Efron, B.},
   journal   = {Ann. Statist.},
   title     = {Bootstrap Methods: Another Look at the Jackknife},
@@ -573,7 +573,6 @@ the bootstrap method are also studied.},
   number    = {1},
   pages     = {1--26},
   volume    = {7},
-  doi       = {10.1214/aos/1176344552},
   fjournal  = {The Annals of Statistics},
   publisher = {The Institute of Mathematical Statistics},
 }
@@ -729,4 +728,4 @@ the bootstrap method are also studied.},
   pages    = {372--375},
   url      = {https://EconPapers.repec.org/RePEc:taf:emetrv:v:28:y:2009:i:4:p:372-375},
   volume   = {28},
-  abstract = {A correction on the optimal block size algorithms of Politis and White (2004) is 
+  abstract = {A correction on the optimal block size algorithms of Politis and White (2004) is given following a correction of Lahiri's 
