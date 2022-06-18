@@ -24,7 +24,7 @@
 #'
 #' @importFrom doParallel registerDoParallel stopImplicitCluster
 #'
-#' @importFrom parallel detectCores makeCluster
+#' @importFrom parallel makeCluster stopCluster
 #'
 #' @importFrom future plan multisession
 #'
@@ -49,7 +49,7 @@ blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "opt
   suppressWarnings('non')#options(warn = -1)
   options("getSymbols.warning4.0" = FALSE)
   future::plan(future::multisession)
-  n_cores <- n_cores#parallel::detectCores()
+  n_cores <- n_cores #parallel::detectCores()
   cl <- parallel::makeCluster(n_cores)
   doParallel::registerDoParallel(cores = n_cores)
   nbb <- function(ts, R, seed, n_cores){
