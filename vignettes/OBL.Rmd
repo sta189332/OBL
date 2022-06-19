@@ -119,6 +119,8 @@ ts <- arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1)
 OBL::blockboot(ts = ts, R = 100, seed = 6, n_cores = 2, methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb"))
 ```
 
+## vignette ##
+vignette("factors.cc", package="rQCC")
 
 
 ## Reference
