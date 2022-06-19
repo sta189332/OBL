@@ -41,8 +41,6 @@
 #'   # get the optimal block length table
 #'   OBL::blockboot(ts = ts, R = 100, seed = 6, n_cores = 2, methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb"))
 #'
-#' @
-#'
 #' @export
 blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb")){
   #To ignore the warnings during usage use the first 2 lines
