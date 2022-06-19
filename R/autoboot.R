@@ -34,13 +34,6 @@
 #'
 #' @importFrom tibble rownames_to_column
 #'
-#' @example
-#'   # simulate univariate time series data
-#'   set.seed(289805)
-#'   ts <- arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1)
-#'   # get the optimal block length table
-#'   OBL::blockboot(ts = ts, R = 100, seed = 6, n_cores = 2, methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb"))
-#'
 #' @export
 blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb")){
   #To ignore the warnings during usage use the first 2 lines
