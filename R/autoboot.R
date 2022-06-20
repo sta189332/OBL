@@ -1,8 +1,6 @@
 #' @title OBL: Optimal Block Length
-
-#'  @description Compute Optimal Block Length for Non-overlapping, Overlapping, Circular Block, tapered moving, and tapered circular Block Bootstrap method
 #'
-#' \code{blockboot} returns the a data frame with five(5) rows and three(3) columns.
+#' @description Compute Optimal Block Length for Non-overlapping, Overlapping, Circular Block, tapered moving, and tapered circular Block Bootstrap method
 #'
 #' @describeIn This package helps to obtain the optimal block length of a time series data
 #'
