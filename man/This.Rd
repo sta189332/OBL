@@ -3,9 +3,8 @@
 \name{blockboot}
 \alias{blockboot}
 \title{OBL: Optimal Block Length
- @description Compute Optimal Block Length for Non-overlapping, Overlapping, Circular Block, tapered moving, and tapered circular Block Bootstrap method
 
-\code{blockboot} returns the a data frame with five(5) rows and three(3) columns.}
+Compute Optimal Block Length for Non-overlapping, Overlapping, Circular Block, tapered moving, and tapered circular Block Bootstrap method}
 \usage{
 blockboot(
   ts,
@@ -28,9 +27,8 @@ blockboot(
 }
 \description{
 OBL: Optimal Block Length
- @description Compute Optimal Block Length for Non-overlapping, Overlapping, Circular Block, tapered moving, and tapered circular Block Bootstrap method
 
-\code{blockboot} returns the a data frame with five(5) rows and three(3) columns.
+Compute Optimal Block Length for Non-overlapping, Overlapping, Circular Block, tapered moving, and tapered circular Block Bootstrap method
 }
 \section{Functions}{
 \itemize{

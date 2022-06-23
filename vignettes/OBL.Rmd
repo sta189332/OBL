@@ -75,7 +75,9 @@ The minimum arguments in the function `blockboot()` can be the `ts` which should
 ```{r usage, include = TRUE, eval = FALSE}
 blockboot(ts,
           R,
-          methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb"))
+         seed,
+         n_cores,
+         methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb"))
 ```
 
 ### Argument
@@ -108,6 +110,10 @@ methods is optional, if specified, it must be any combination as follows: "optnb
 
 :::
 ::::::::::::::
+
+### Output
+
+The suction output a data frame with 5 rows 3 columns which are "Methods", "lb" and "RMSE". Method with the minimum RMSE value is 
 
 ### Examples
 
