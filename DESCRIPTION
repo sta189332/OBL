@@ -8,7 +8,7 @@ Authors@R: c(
 Maintainer: Daniel James <futathesis@gmail.com>
 Description: Obtain optimum block from Non-overlapping Block Bootstrap method.
 Depends:
-  R (>= 4.2.1)
+  R (>= 4.2.0)
 Imports:
   forecast,
   foreach,
