@@ -22,7 +22,7 @@
 #'
 #' @importFrom doParallel registerDoParallel
 #'
-#' @importFrom parallel makeCluster stopCluster
+#' @importFrom parallel makeCluster
 #'
 #' @importFrom future plan multisession
 #'
