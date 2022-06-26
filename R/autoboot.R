@@ -20,7 +20,7 @@
 #'
 #' @importFrom foreach `%dopar%` foreach
 #'
-#' @importFrom doParallel registerDoParallel stopImplicitCluster
+#' @importFrom doParallel registerDoParallel
 #'
 #' @importFrom parallel makeCluster stopCluster
 #'
@@ -31,6 +31,12 @@
 #' @importFrom stats embed
 #'
 #' @importFrom tibble rownames_to_column
+#'
+#' @return A data frame get printed to the console
+#'
+#' @examples set.seed(289805)
+#' @examples ts <- stats::arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1)
+#' @examples blockboot(ts = ts, R = 100, seed = 6, n_cores = 2)
 #'
 #' @export
 blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb")){
@@ -214,7 +220,7 @@ blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "opt
     colnames(tcbb_rmse) <- c("lb", "RMSE")
     tcbb_rmse
   }
-  parallel::stopCluster(cl)
+  #parallel::stopCluster(cl)
 
   output <- list()
 
@@ -239,8 +245,9 @@ blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "opt
   }
 
   df <- list(nbb = data.frame(output$nbb.lb, output$nbb.RMSE), mbb = data.frame(output$mbb.lb, output$mbb.RMSE), cbb = data.frame(output$cbb.lb, output$cbb.RMSE), tmbb = data.frame(output$tmbb.lb, output$tmbb.RMSE), tcbb = data.frame(output$tcbb.lb, output$tcbb.RMSE))
+
   df1 <- do.call(rbind, lapply(df, function(x) data.frame(lb = x[which.min(x[,2]), 1], RMSE = min(x[, 2])))) |>
     tibble::rownames_to_column("Methods")
-
   df1
+  parallel::stopCluster(cl)
 }

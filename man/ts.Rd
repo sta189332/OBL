@@ -31,4 +31,8 @@ It could be a vector
 A dataset containing simulated univariate time series of 10
 ts.
 }
+\examples{
+ set.seed(289805)
+ ts <- stats::arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1)
+}
 \keyword{datasets}

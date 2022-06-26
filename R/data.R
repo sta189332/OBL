@@ -18,7 +18,6 @@
 #' @return It returns a univairate time series data
 #' It could be a vector
 #'
-#' @Examples Simulated data generated with the following code:
-#'   set.seed(289805)
-#'   ts <- stats::arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1)
+#' @examples  set.seed(289805)
+#' @examples  ts <- stats::arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1)
 "ts"

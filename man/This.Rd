@@ -25,6 +25,9 @@ blockboot(
 
 \item{methods}{"optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb"}
 }
+\value{
+A data frame get printed to the console
+}
 \description{
 OBL: Optimal Block Length
 
@@ -35,3 +38,9 @@ Compute Optimal Block Length for Non-overlapping, Overlapping, Circular Block, t
 \item \code{blockboot}: package helps to obtain the optimal block length of a time series data
 }}
 
+\examples{
+set.seed(289805)
+ts <- stats::arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1)
+blockboot(ts = ts, R = 100, seed = 6, n_cores = 2)
+
+}
