@@ -45,7 +45,7 @@ blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "opt
   options("getSymbols.warning4.0" = FALSE)
   future::plan(future::multisession)
   n_cores <- n_cores #parallel::detectCores()
-  cl <- parallel::makeCluster(n_cores)
+  parallel::makeCluster(n_cores)
   doParallel::registerDoParallel(cores = n_cores)
   nbb <- function(ts, R, seed, n_cores){
     n <- length(ts)
