@@ -40,7 +40,7 @@ Compute Optimal Block Length for Non-overlapping, Overlapping, Circular Block, t
 
 \examples{
 set.seed(289805)
-ts <- stats::arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1)
+ts <- arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1)
 blockboot(ts = ts, R = 100, seed = 6, n_cores = 2)
 
 }
