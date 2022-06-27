@@ -36,8 +36,8 @@
 #'
 #' @examples
 #'   set.seed(289805)
-#'   ts <- arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1)
-#'   blockboot(ts = ts, R = 10, seed = 6, n_cores = 2)
+#'   ts <- arima.sim(n = 3, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1)
+#'   blockboot(ts = ts, R = 5, seed = 6, n_cores = 2)
 #'
 #' @export
 blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb")){
