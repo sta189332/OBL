@@ -45,8 +45,9 @@ blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "opt
   suppressWarnings('non')#options(warn = -1)
   options("getSymbols.warning4.0" = FALSE)
   future::plan(future::multisession)
-  n_cores <- n_cores #parallel::detectCores()
-  parallel::makeCluster(n_cores)
+  n_coress <- parallel::detectCores()
+  cl <- parallel::makeCluster(n_coress)
+  on.exit(parallel::stopCluster(cl))
   doParallel::registerDoParallel(cores = n_cores)
   nbb <- function(ts, R, seed, n_cores){
     n <- length(ts)
@@ -248,6 +249,7 @@ blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "opt
 
   df1 <- do.call(rbind, lapply(df, function(x) data.frame(lb = x[which.min(x[,2]), 1], RMSE = min(x[, 2])))) |>
     tibble::rownames_to_column("Methods")
-  closeAllConnections()
+  #doParallel::stopImplicitCluster(cl) #parallel::stopCluster(cl)#closeAllConnections()
   df1
 }
+

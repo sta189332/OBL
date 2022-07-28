@@ -122,7 +122,7 @@ The suction output a data frame with 5 rows 3 columns which are "Methods", "lb" 
 set.seed(289805)
 ts <- arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1) 
 # get the optimal block length table
-OBL::blockboot(ts = ts, R = 100, seed = 6, n_cores = 2)
+OBL::blockboot(ts = ts, R = 100, seed = 6, n_cores = 1)
 #  Methods lb      RMSE
 #1     nbb  9 0.2402482
 #2     mbb  9 0.1023012
