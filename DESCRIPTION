@@ -12,9 +12,6 @@ Depends:
 Imports:
   forecast,
   foreach,
-  doParallel,
-  parallel,
-  future,
   utils,
   stats,
   tibble

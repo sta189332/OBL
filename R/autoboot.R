@@ -20,12 +20,6 @@
 #'
 #' @importFrom foreach `%dopar%` foreach
 #'
-#' @importFrom doParallel registerDoParallel
-#'
-#' @importFrom parallel makeCluster
-#'
-#' @importFrom future plan multisession
-#'
 #' @importFrom utils head tail
 #'
 #' @importFrom stats embed
@@ -44,11 +38,11 @@ blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "opt
   #To ignore the warnings during usage use the first 2 lines
   suppressWarnings('non')#options(warn = -1)
   options("getSymbols.warning4.0" = FALSE)
-  future::plan(future::multisession)
-  n_coress <- parallel::detectCores()
-  cl <- parallel::makeCluster(n_coress)
-  on.exit(parallel::stopCluster(cl))
-  doParallel::registerDoParallel(cores = n_cores)
+  #future::plan(future::multisession)
+  #nn_cores <- parallel::detectCores()
+  #cl <- parallel::makeCluster(nn_cores)
+  ##on.exit(parallel::stopCluster(cl))
+  #doParallel::registerDoParallel(cores = n_cores)
   nbb <- function(ts, R, seed, n_cores){
     n <- length(ts)
     lb <- seq(n - 2) + 1
@@ -65,7 +59,7 @@ blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "opt
 
       test <- utils::tail(res.unlist, length(res.unlist) - length(train))
 
-      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = FALSE, num.cores = NULL), h = length(test))$mean)
+      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = FALSE, num.cores = n_cores), h = length(test))$mean)
 
       accuracyy <- forecast::accuracy(nfuture, test)
     }
@@ -95,7 +89,7 @@ blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "opt
 
       test <- tail(res.unlist, length(res.unlist) - length(train))
 
-      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = FALSE, num.cores = NULL), h = length(test))$mean)        # makes the `future` object a vector
+      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = FALSE, num.cores = n_cores), h = length(test))$mean)        # makes the `future` object a vector
 
       accuracyy <- forecast::accuracy(nfuture, test)      # RETURN ACCURACY
     }
@@ -126,7 +120,7 @@ blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "opt
 
       test <- tail(res.unlist, length(res.unlist) - length(train))
 
-      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = FALSE, num.cores = NULL), h = length(test))$mean)        # makes the `future` object a vector
+      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = FALSE, num.cores = n_cores), h = length(test))$mean)        # makes the `future` object a vector
 
       ACCURACYY <- forecast::accuracy(nfuture, test)      # RETURN ACCURACY
 
@@ -170,7 +164,7 @@ blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "opt
 
       test <- tail(res.unlist, length(res.unlist) - length(train))
 
-      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = FALSE, num.cores = NULL), h = length(test))$mean)        # makes the `future` object a vector
+      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = FALSE, num.cores = n_cores), h = length(test))$mean)        # makes the `future` object a vector
 
       accuracyy <- forecast::accuracy(nfuture, test)      # RETURN ACCURACY
     }
@@ -213,7 +207,7 @@ blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "opt
 
       test <- tail(res.unlist, length(res.unlist) - length(train))
 
-      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = FALSE, num.cores = NULL), h = length(test))$mean)        # makes the `future` object a vector
+      nfuture <- as.numeric(forecast::forecast(train, model = forecast::auto.arima(train, parallel = TRUE, stepwise = FALSE, num.cores = n_cores), h = length(test))$mean)        # makes the `future` object a vector
 
       accuracyy <- forecast::accuracy(nfuture, test)      # RETURN ACCURACY
     }
@@ -249,7 +243,7 @@ blockboot <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "opt
 
   df1 <- do.call(rbind, lapply(df, function(x) data.frame(lb = x[which.min(x[,2]), 1], RMSE = min(x[, 2])))) |>
     tibble::rownames_to_column("Methods")
-  #doParallel::stopImplicitCluster(cl) #parallel::stopCluster(cl)#closeAllConnections()
+  #parallel::stopCluster(cl)#doParallel::stopImplicitCluster(cl) #parallel::stopCluster(cl)#closeAllConnections()
   df1
 }
 
