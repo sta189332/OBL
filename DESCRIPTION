@@ -1,7 +1,7 @@
 Package: OBL
 Type: Package
 Title: Optimum Block Length
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
   person("Daniel", "James", email = "futathesis@gmail.com", role = c("cre","aut")),
   person("Ayinde", "Kayode", email = "kayinde@futa.edu.ng", role = "aut"))
