@@ -12,6 +12,9 @@ Depends:
 Imports:
   forecast,
   foreach,
+  dplyr,
+  forcats,
+  ggplot2,
   utils,
   stats,
   tibble
