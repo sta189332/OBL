@@ -37,7 +37,7 @@
 #' @examples
 #'   set.seed(289805)
 #'   ts <- arima.sim(n = 3, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1)
-#'   lolliblock(ts, R = 5, seed = 6, n_cores = 2)
+#'   lolliblock(ts, R = 3, seed = 6, n_cores = 2)
 #'
 #' @export
 lolliblock <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb")){
