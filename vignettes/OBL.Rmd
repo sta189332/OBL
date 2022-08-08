@@ -65,15 +65,26 @@ devtools::install_github("sta189332/OBL")
 
 ## Description
 
-It is observed that the optimum block length of any time series data is contingent(dependent) on the uniqueness of every time series data. Block bootstrap users thus, need to be flexible in choosing the optimum block length by adopting to a concise but clear while such method must be easy to use as well. As a result of the such a need, `OBL: Optimum Block Lengt` package is created to solve such problem. `OBL: Optimum Block Length` package helps users to search for the best block length and the best method that has the minimum RMSE value. It can then be used 
+It is observed that the optimum block length of any time series data is contingent(dependent) on the uniqueness of every time series data. Block bootstrap users thus, need to be flexible in choosing the optimum block length by adopting to a concise but clear while such method must be easy to use as well. As a result of the such a need, `OBL: Optimum Block Lengt` package is created to solve such problem. `OBL: Optimum Block Length` package helps users to search for the best block length and the best method that has the minimum RMSE value.  
 blockboot function produces a data frame with three (3) column (Method, lb \& RMSE).
+
+lolliblock function is another function that can plot the lollipop chart of the data frame displays by the blockboot function. It shows the optimum block lengths, for each method with different colours ranging from red to green. While red shows the method with worst performance (method with the highest RMSE) the green colour shows the method with the smallest RMSE. The corresponding block length of each methods as a **legend** with their matching colours.
 
 ## Usage
 
 The minimum arguments in the function `blockboot()` can be the `ts` which should be a univirate time series data and `R` which is the numbers of replicate of resapling.
 
-```{r usage, include = TRUE, eval = FALSE}
+```{r usage_blockboot, include = TRUE, eval = FALSE}
 blockboot(ts,
+          R,
+         seed,
+         n_cores,
+         methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb"))
+```
+While the minimum arguments in the function `lolliblock()` can be the `ts` which should be a univirate time series data and `R` which is the numbers of replicate of resapling.
+
+```{r usage_lolliblock, include = TRUE, eval = FALSE}
+lolliblock(ts,
           R,
          seed,
          n_cores,
@@ -117,7 +128,7 @@ The suction output a data frame with 5 rows 3 columns which are "Methods", "lb" 
 
 ### Examples
 
-```{r simulate, include = TRUE, eval = FALSE}
+```{r simulate1, include = TRUE, eval = FALSE}
 # simulate univariate time series data
 set.seed(289805)
 ts <- arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1) 
@@ -129,6 +140,18 @@ OBL::blockboot(ts = ts, R = 100, seed = 6, n_cores = 2)
 #3     cbb  8 0.2031448
 #4    tmbb  4 0.2654746
 #5    tcbb  9 0.4048711
+```
+
+The suction output a lollipop chart with 5 pops for the 5 methods separated with 5 distinct colours while the method with red lollipop indicates the least desired method with the highest RMSE and the method with green lollipop indicates the preferred method having the lowest RMSE. The **legend** beside the chart indicate the optimum block length for each method.
+
+### Examples2
+
+```{r simulate2, include = TRUE, eval = FALSE}
+# simulate univariate time series data
+set.seed(289805)
+ts <- arima.sim(n = 10, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1) 
+# get the optimal block length table
+OBL::lolliblock(ts = ts, R = 100, seed = 6, n_cores = 2)
 ```
 
 ## vignette ##

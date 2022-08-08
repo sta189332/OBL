@@ -1,6 +1,10 @@
 # OBL 0.2.0
 
+- lolliblock function is add to plot the optimal block length for ach method
+
 ## version 0.1.1
+
+- fix burgs as a result of change in forecast package
 
 ---
 
