@@ -1,6 +1,7 @@
 # OBL 0.2.0
 
-- lolliblock function is add to plot the optimal block length for ach method
+- lolliblock function is add to plot the optimal block length for each method
+- NOTE burg fixed
 
 ## version 0.1.1
 
