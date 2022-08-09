@@ -37,7 +37,7 @@
 #' @examples
 #'   set.seed(289805)
 #'   ts <- arima.sim(n = 3, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 1)
-#'   lolliblock(ts, R = 3, seed = 6, n_cores = 2)
+#'   lolliblock(ts, R = 2, seed = 6, n_cores = 2)
 #'
 #' @export
 lolliblock <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "optcbb", "opttmbb", "opttcbb")){
@@ -250,10 +250,10 @@ lolliblock <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "op
     tibble::rownames_to_column("Methods")
 
   df1 |>
-    dplyr::mutate(colour = forcats::fct_reorder(Methods, RMSE)) |>
-    ggplot2::ggplot(ggplot2::aes(Methods, RMSE, colour = colour)) +
+    dplyr::mutate(colour = forcats::fct_reorder(df1$Methods, df1$RMSE)) |>
+    ggplot2::ggplot(ggplot2::aes(df1$Methods, df1$RMSE, colour = df1$colour)) +
     ggplot2::geom_point(size = 4) +
-    ggplot2::geom_segment(ggplot2::aes(Methods, xend = Methods, yend = RMSE, y = 0)) +
+    ggplot2::geom_segment(ggplot2::aes(df1$Methods, xend = df1$Methods, yend = df1$RMSE, y = 0)) +
     ggplot2::scale_color_manual(values = c("green", "yellowgreen", "yellow",
                                            "orange", "red"),
                                 labels = c(9, 8, 9, 9, 4), name = "lb") +
