@@ -259,3 +259,6 @@ lolliblock <- function(ts, R, seed, n_cores, methods = c("optnbb", "optmbb", "op
                                 labels = c(9, 8, 9, 9, 4), name = "lb") +
     ggplot2::theme_bw(base_size = 16)
 }
+#set.seed(289805)
+#ts <- arima.sim(n = 3, model = list(ar = 0.8, order = c(1, 0, 0)), sd = 10)
+#lolliblock(ts, R = 10000, seed = 12345, n_cores = 1)
